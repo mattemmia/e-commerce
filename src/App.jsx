@@ -11,7 +11,6 @@ import ProtectRoute from './components/ProtectRout';
 import StockManagement from './components/admin/stockManagement';
 import ProductForm from './components/admin/productForm';
 import Navbar from './components/Navbar';
-import './index.css';
 
 function App() {
   return (
