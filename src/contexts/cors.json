@@ -1,0 +1,9 @@
+[
+  {
+    "origin": [
+      "http://localhost:3000",
+      "http://myapp.web.app], // remember to add the app link"method": ["GET","POST","PUt","DELETE","HEAD"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]
