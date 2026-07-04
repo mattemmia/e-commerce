@@ -1,10 +1,10 @@
 /** @type {import('tailwindcss').Config} */
-module.exports {
+export default {
   darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
-    "!./functions/**/*", // <-- ADD THIS LINE. This is the fix
+    "!./functions/**/*",
   ],
   theme: {
     extend: {
