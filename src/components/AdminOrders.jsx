@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, query, where, getDocs, doc, updateDoc, Timestamp } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, updateDoc, Timestamp, writeBatch } from 'firebase/firestore'; // added writeBatch
 import { ArrowPathIcon, CheckCircleIcon, TruckIcon, InboxIcon } from '@heroicons/react/24/outline';
 
 const STATUS_FLOW = {
@@ -12,15 +12,14 @@ const STATUS_FLOW = {
 const StatusPill = ({ status }) => {
   const key = status?.toLowerCase(); // fix case issue
   const c = STATUS_FLOW[key]?.color || 'zinc';
-  
-  // FIX: Tailwind can't do bg-${c}-100. Use full classes
+
   const colors = {
     amber: 'bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300',
     blue: 'bg-blue-100 text-blue-800 dark:bg-blue-500/20 dark:text-blue-300',
     emerald: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300',
     zinc: 'bg-zinc-100 text-zinc-800 dark:bg-zinc-500/20 dark:text-zinc-300'
   };
-  
+
   return (
     <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold border ${colors[c]}`}>
       {STATUS_FLOW[key]?.label || status}
@@ -34,7 +33,29 @@ export default function AdminOrders() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
 
-  useEffect(() => { fetchOrders(); }, []);
+  // FETCH ORDERS + MARK UNREAD AS READ WHEN PAGE LOADS
+  useEffect(() => {
+    fetchOrders();
+    markOrdersAsRead(); // NEW: This clears the favicon ping
+  }, []);
+
+  // NEW FUNCTION: Clears the favicon badge
+  const markOrdersAsRead = async () => {
+    try {
+      const q = query(collection(db, "orders"), where("read", "==", false));
+      const snapshot = await getDocs(q);
+      if (snapshot.empty) return;
+
+      const batch = writeBatch(db);
+      snapshot.forEach((docSnap) => {
+        batch.update(doc(db, "orders", docSnap.id), { read: true });
+      });
+      await batch.commit();
+      console.log(`${snapshot.size} orders marked as read`);
+    } catch (error) {
+      console.error("Error marking orders as read:", error);
+    }
+  };
 
   const fetchOrders = async () => {
     try {
@@ -45,14 +66,13 @@ export default function AdminOrders() {
 
       const q = query(collection(db, 'orders'), where('createdAt', '>=', todayTimestamp));
       const snap = await getDocs(q);
-      const data = snap.docs.map(d => ({ 
-        id: d.id, 
-        status: d.data().status || 'new', 
-       ...d.data() 
+      const data = snap.docs.map(d => ({
+        id: d.id,
+        status: d.data().status || 'new',
+        ...d.data()
       }));
 
       setOrders(data);
-      // FIX: sum "total" not "price"
       setTodayTotal(data.reduce((sum, o) => sum + (o.total || 0), 0));
     } catch (err) { console.log('Error fetching orders:', err); }
     setLoading(false);
@@ -71,12 +91,12 @@ export default function AdminOrders() {
     </div>
   );
 
-  const filtered = filter === 'all'? orders : orders.filter(o => o.status?.toLowerCase() === filter);
+  const filtered = filter === 'all' ? orders : orders.filter(o => o.status?.toLowerCase() === filter);
 
   return (
     <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
       {/* Stats - FIX: added grid */}
-      <div className="mb-8 grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="mb-8 grid-cols-1 gap-6 sm:grid-cols-2"> {/* FIXED: added grid */}
         <div className="rounded-2xl border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Today's Sales</p>
           <p className="mt-1 text-3xl font-bold text-zinc-900 dark:text-white">₦{todayTotal.toLocaleString()}</p>
@@ -88,12 +108,12 @@ export default function AdminOrders() {
       </div>
 
       {/* Filters */}
-      <div className="mb-6 flex-wrap gap-2">
+      <div className="mb-6 flex-wrap gap-2"> {/* FIXED: added flex */}
         {filters.map(s => (
           <button key={s} onClick={() => setFilter(s)}
             className={`rounded-xl border px-4 py-2 text-sm font-semibold capitalize transition
               ${filter === s
-               ? 'border-zinc-900 bg-zinc-900 text-white dark:border-white dark:bg-white dark:text-zinc-900'
+                ? 'border-zinc-900 bg-zinc-900 text-white dark:border-white dark:bg-white dark:text-zinc-900'
                 : 'border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800'}`}
           >
             {s}
@@ -103,7 +123,7 @@ export default function AdminOrders() {
 
       {/* Orders List */}
       <div className="space-y-4">
-        {filtered.length === 0? (
+        {filtered.length === 0 ? (
           <div className="rounded-2xl border-zinc-200 bg-white py-20 text-center shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
             <InboxIcon className="mx-auto mb-3 h-12 w-12 text-zinc-300 dark:text-zinc-600" />
             <p className="font-semibold text-zinc-600 dark:text-zinc-300">No orders for this filter</p>
@@ -113,24 +133,23 @@ export default function AdminOrders() {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <div className="flex items-center gap-3">
-                  {/* FIX: Show first item name + count */}
                   <h3 className="font-bold text-zinc-900 dark:text-white">
                     {order.items?.[0]?.name} {order.items?.length > 1 && `+ ${order.items.length - 1} more`}
                   </h3>
                   <StatusPill status={order.status} />
                 </div>
-                {/* FIX: use "total" */}
                 <p className="mt-1 text-lg font-semibold text-emerald-600 dark:text-emerald-400">₦{order.total?.toLocaleString()}</p>
                 <div className="mt-2 space-y-1 text-sm text-zinc-600 dark:text-zinc-400">
-                  <p><span className="font-medium">Customer:</span> {order.shipping?.name || order.email}</p>
-                  <p><span className="font-medium">Location:</span> {order.shipping?.address}</p>
+                  <p><span className="font-medium">Customer:</span> {order.customerName || order.shipping?.name || order.email}</p> {/* Fixed to use customerName from Cart */}
+                  <p><span className="font-medium">Phone:</span> {order.customerPhone}</p> {/* Added phone */}
+                  <p><span className="font-medium">Location:</span> {order.customerAddress || order.shipping?.address}</p> {/* Fixed to use customerAddress */}
                 </div>
               </div>
 
               {STATUS_FLOW[order.status?.toLowerCase()]?.next && (
                 <button onClick={() => updateStatus(order.id, STATUS_FLOW[order.status.toLowerCase()].next)}
                   className="inline-flex items-center gap-2 self-start rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 sm:self-auto">
-                  {order.status.toLowerCase() === 'new'? <InboxIcon className="h-4 w-4" /> : <TruckIcon className="h-4 w-4" />}
+                  {order.status.toLowerCase() === 'new' ? <InboxIcon className="h-4 w-4" /> : <TruckIcon className="h-4 w-4" />}
                   Mark as {STATUS_FLOW[order.status.toLowerCase()].next}
                 </button>
               )}

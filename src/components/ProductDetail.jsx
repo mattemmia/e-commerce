@@ -1,3 +1,4 @@
+import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db, auth } from '../firebase';
 import { doc, addDoc, collection } from 'firebase/firestore';
@@ -19,14 +20,14 @@ const StarRating = ({ rating = 0, readOnly = true, size = 20, onChange }) => {
           key={star}
           type="button"
           disabled={readOnly}
-          onClick={() =>!readOnly && onChange?.(star)}
-          onMouseEnter={() =>!readOnly && setHover(star)}
-          onMouseLeave={() =>!readOnly && setHover(0)}
+          onClick={() => !readOnly && onChange?.(star)}
+          onMouseEnter={() => !readOnly && setHover(star)}
+          onMouseLeave={() => !readOnly && setHover(0)}
           className={`transition-transform ${!readOnly && 'hover:scale-125'}`}
         >
-          {star <= (hover || rating)?
-            <StarIcon className={`text-yellow-400`} style={{width: size, height: size}} /> :
-            <StarOutline className="text-zinc-300 dark:text-zinc-600" style={{width: size, height: size}} />
+          {star <= (hover || rating) ?
+            <StarIcon className={`text-yellow-400`} style={{ width: size, height: size }} /> :
+            <StarOutline className="text-zinc-300 dark:text-zinc-600" style={{ width: size, height: size }} />
           }
         </button>
       ))}
@@ -115,10 +116,10 @@ export default function ProductDetail() {
             <div className="mt-4 flex items-center gap-3">
               <StarRating rating={avgRating} readOnly size={20} />
               <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
-                {avgRating > 0? `${avgRating.toFixed(1)} out of 5` : 'No ratings yet'}
+                {avgRating > 0 ? `${avgRating.toFixed(1)} out of 5` : 'No ratings yet'}
               </span>
               {reviewCount > 0 && (
-                <span className="text-sm text-zinc-400">• {reviewCount} review{reviewCount > 1? 's' : ''}</span>
+                <span className="text-sm text-zinc-400">• {reviewCount} review{reviewCount > 1 ? 's' : ''}</span>
               )}
             </div>
 
@@ -150,10 +151,10 @@ export default function ProductDetail() {
                         shadow-[0_4px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_30px_rgba(0,0,0,0.4)]">
           <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Rate this product</h2>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-            Based on {reviewCount} customer rating{reviewCount!== 1 && 's'}
+            Based on {reviewCount} customer rating{reviewCount !== 1 && 's'}
           </p>
 
-          {auth.currentUser? (
+          {auth.currentUser ? (
             <div className="mt-6 rounded-2xl border-2 border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 p-6">
               <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">
                 Posting as: <b>{auth.currentUser.displayName || auth.currentUser.email?.split('@')[0]}</b>

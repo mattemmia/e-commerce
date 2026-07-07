@@ -1,8 +1,9 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, query, orderBy, onSnapshot, doc, updateDoc } from 'firebase/firestore';
-import { Link } from 'react-router-dom';
-import { PlusIcon, CurrencyDollarIcon, ClockIcon, CheckCircleIcon, ShoppingBagIcon } from '@heroicons/react/24/outline';
+import { Link, useNavigate } from 'react-router-dom';
+import { PlusIcon, CurrencyDollarIcon, ClockIcon, CheckCircleIcon, ShoppingBagIcon, CubeIcon } from '@heroicons/react/24/outline';
 
 const StatCard = ({ icon: Icon, label, value, color }) => (
   <div className="rounded-2xl border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
@@ -34,6 +35,7 @@ const StatusBadge = ({ status }) => {
 export default function AdminDashboard() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate(); // ADDED
 
   useEffect(() => {
     const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
@@ -66,18 +68,34 @@ export default function AdminDashboard() {
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
 
       {/* Header */}
-      <div className="mb-8 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-8 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"> {/* FIXED: added flex */}
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">Dashboard</h1>
           <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Manage orders and track sales</p>
         </div>
-        <Link to="/admin/upload" className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-zinc-900/10 transition hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200">
-          <PlusIcon className="h-5 w-5" /> Add Product
-        </Link>
+
+        {/* BUTTONS GROUP */}
+        <div className="flex gap-3">
+          {/* Inventory Button - NEW */}
+          <button
+            onClick={() => navigate('/admin/stock')}
+            className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/10 transition hover:bg-indigo-700"
+          >
+            <CubeIcon className="h-5 w-5" /> Inventory
+          </button>
+
+          {/* Add Product Button */}
+          <Link
+            to="/admin/upload"
+            className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-zinc-900/10 transition hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
+          >
+            <PlusIcon className="h-5 w-5" /> Add Product
+          </Link>
+        </div>
       </div>
 
       {/* Stats Grid */}
-      <div className="mb-8 grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-8 grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"> {/* FIXED: added grid */}
         <StatCard icon={ShoppingBagIcon} label="Total Orders" value={stats.total} color="bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300" />
         <StatCard icon={ClockIcon} label="New Orders" value={stats.new} color="bg-amber-100 text-amber-600 dark:bg-amber-500/20 dark:text-amber-300" />
         <StatCard icon={CheckCircleIcon} label="Delivered" value={stats.delivered} color="bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-300" />

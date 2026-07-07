@@ -1,6 +1,7 @@
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AdminUpload from './components/AdminUpload';
-import Homepage from './components/Homepage';
+import Homepage from './Homepage';
 import Cart from './components/Cart';
 import { CartProvider } from './components/CartContext';
 import ProductDetail from './components/ProductDetail'
@@ -11,6 +12,8 @@ import ProtectRoute from './components/ProtectRout';
 import StockManagement from './components/admin/stockManagement';
 import ProductForm from './components/admin/productForm';
 import Navbar from './components/Navbar';
+
+
 
 function App() {
   return (

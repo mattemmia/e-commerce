@@ -1,4 +1,7 @@
+import React from 'react';
 import { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import { db } from '../firebase'; // make sure this path is correct
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 
 const CartContext = createContext(null); // null = easier to catch missing provider
 
@@ -77,7 +80,34 @@ export function CartProvider({ children }) {
 
   const clearCart = () => setCart([]);
 
-  // 5. useMemo = no recalc on unrelated rerenders
+  // 5. NEW: Place Order Function - This triggers the favicon ping
+  const placeOrder = async (userId, customerInfo) => {
+    if (cart.length === 0) return alert("Cart is empty");
+
+    try {
+      await addDoc(collection(db, "orders"), {
+        userId: userId,
+        items: cart, // full cart array
+        subtotal: subtotal,
+        total: total,
+        customer: customerInfo, // { name, phone, address }
+        status: "pending",
+        read: false, // <-- THIS TRIGGERS THE FAVICON PING
+        createdAt: serverTimestamp()
+      });
+
+      clearCart(); // empty cart after order
+      alert("Order placed successfully!");
+      return true;
+
+    } catch (error) {
+      console.error("Error placing order: ", error);
+      alert("Failed to place order: " + error.message);
+      return false;
+    }
+  };
+
+  // 6. useMemo = no recalc on unrelated rerenders
   const itemCount = useMemo(() => cart.reduce((sum, item) => sum + item.qty, 0), [cart]);
   const subtotal = useMemo(() => cart.reduce((sum, item) => sum + item.price * item.qty, 0), [cart]);
   const total = subtotal; // Add tax/delivery here later
@@ -88,6 +118,7 @@ export function CartProvider({ children }) {
     removeFromCart,
     updateQty,
     clearCart,
+    placeOrder, // <-- EXPORT IT
     total,
     itemCount,
     subtotal

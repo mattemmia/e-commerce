@@ -1,4 +1,4 @@
-# 🛒 ShopSwift - E-commerce Web App
+# 🛒 Omonsco - E-commerce Web App
 
 A full-featured e-commerce platform with Firebase backend, real-time WhatsApp ordering, inventory tracking, and admin dashboard.  
 Built for small businesses to sell online easily.
@@ -24,7 +24,7 @@ Built for small businesses to sell online easily.
 | Category | Technology |
 | --- | --- |
 | **Frontend** | React 18, TailwindCSS 3.3.6 |
-| **Backend / Database** | Firebase Firestore NoSQL, Firebase Authentication |
+| **Backend / Database** | Firebase Firestore NoSQL, Firebase Authentication |           cloudinary for image storage.
 | **Tools** | Vite 5.4.11, PostCSS, Autoprefixer |
 | **Deployment** | Vercel + GitHub |
 | **Integration** | WhatsApp Business API Link |
