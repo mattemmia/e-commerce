@@ -12,6 +12,7 @@
 /build
 node_modules
 dist
+serviceAccountKey.json
 
 # misc
 .DS_Store
