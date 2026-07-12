@@ -21,13 +21,14 @@ Need a custom Ecommerce System?
 
 | Feature | Preview |
 |:--------:|:-------:|
-| **Authentication** | ![Admin Page](/preview/admin1.png)  | ![Admin Page](/preview/admin2.png)
-| **Home ** | ![Home Page](/preview/home.png) |
-| **Cart** | ![Cart Page](/preview/cart.png) |
-| **Order** | ![Order Page](/preview/order.png) |
-| **Inventory** | ![Inventory Page](/preview/inventory.png) |
-| **Adding Product** | ![Add Product Page](/preview/add.png) |
-| **Product Details** | ![Product Detail Page](/preview/detail.png)
+| **Login** | ![Login Page](/preview/login.PNG) |
+| **Authentication** | ![Admin Page](/preview/admin1.PNG)  | ![Admin Page](/preview/admin2.PNG)
+| **Home** | ![Home Page](/preview/home.PNG) |
+| **Cart** | ![Cart Page](/preview/cart.PNG) |
+| **Order** | ![Order Page](/preview/order.PNG) |
+| **Inventory** | ![Inventory Page](/preview/inventory.PNG) |
+| **Adding Product** | ![Add Product Page](/preview/add.PNG) |
+| **Product Details** | ![Product Detail Page](/preview/detail.PNG)
 
 ## ✨ Key Features
 
