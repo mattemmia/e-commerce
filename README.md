@@ -1,10 +1,27 @@
 # 🛒 Omonsco - E-commerce Web App
 
-A full-featured e-commerce platform with Firebase backend, real-time WhatsApp ordering, inventory tracking, and admin dashboard.  
-Built for small businesses to sell online easily.
+A full-stack e-commerce platform with Firebase backend, real-time WhatsApp ordering, inventory tracking, cart, checkout, payment and admin dashboard.  
+Built for businesses to sell online easily.
 
 ## 🚀 Live Demo
-[https://e-commerce.vercel.app](https://e-commerce.vercel.app)
+[https://e-commerce.vercel.app](https://e-commerce-h688.vercel.app/)
+
+---
+### Let's Build Together
+Need a custom Ecommerce System?
+
+**📱 WhatsApp**: [Click to Chat](https://wa.me/2349036583105)  
+**📞 Call**: +2347038321151  
+
+##[Home Page](/preview/home.ping)
+##[Cart Page](/preview/cart.ping)
+##[Order Page](/preview/order.ping)
+##[Admin Page](/preview/admin1.ping)
+##[Admin Page](/preview/admin2.ping)
+##[Inventory Page](/preview/inventory.ping)
+##[Add Product Page](/preview/add.ping)
+##[Product Detail Page](/preview/detail.ping)
+
 
 ## ✨ Key Features
 
@@ -28,9 +45,3 @@ Built for small businesses to sell online easily.
 | **Tools** | Vite 5.4.11, PostCSS, Autoprefixer |
 | **Deployment** | Vercel + GitHub |
 | **Integration** | WhatsApp Business API Link |
-
-## 📦 Installation & Setup
-1. **Clone the repo**
-   ```bash
-   git clone https://github.com/mattemmia/shopswift.git
-   cd shopswift
