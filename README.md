@@ -13,17 +13,21 @@ Need a custom Ecommerce System?
 **📱 WhatsApp**: [Click to Chat](https://wa.me/2349036583105)  
 **📞 Call**: +2347038321151  
 
+
+
+
+
+
+
 | Feature | Preview |
 |:--------:|:-------:|
-![Home Page](/preview/home.png)
-![Cart Page](/preview/cart.png)
-![Order Page](/preview/order.png)
-![Admin Page](/preview/admin1.png)
-| **Authentication** | ![Admin Page](/preview/admin2.png)
-![Inventory Page](/preview/inventory.png)
-![Add Product Page](/preview/add.png)
-![Product Detail Page](/preview/detail.png)
-
+| **Authentication** | ![Admin Page](/preview/admin1.png)  | ![Admin Page](/preview/admin2.png)
+| **Home ** | ![Home Page](/preview/home.png) |
+| **Cart** | ![Cart Page](/preview/cart.png) |
+| **Order** | ![Order Page](/preview/order.png) |
+| **Inventory** | ![Inventory Page](/preview/inventory.png) |
+| **Adding Product** | ![Add Product Page](/preview/add.png) |
+| **Product Details** | ![Product Detail Page](/preview/detail.png)
 
 ## ✨ Key Features
 
