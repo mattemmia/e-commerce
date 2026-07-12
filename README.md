@@ -4,7 +4,7 @@ A full-stack e-commerce platform with Firebase backend, real-time WhatsApp order
 Built for businesses to sell online easily.
 
 ## 🚀 Live Demo
-[https://e-commerce.vercel.app](https://e-commerce-h688.vercel.app/)
+[https://e-commerce-h688.vercel.app/](https://e-commerce-h688.vercel.app/)
 
 ---
 ### Let's Build Together
